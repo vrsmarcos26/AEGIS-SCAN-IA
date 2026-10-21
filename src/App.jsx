@@ -30,12 +30,12 @@ const AIcon = ({ size = "normal" }) => {
 // MOTOR DE REGRAS DE SEGURANÇA (SAST ENGINE)
 // ==========================================
 const REGRAS_SAST = [
-  { regex: /\b(eval|exec|Function)\s*\(/i, vuln: "Code Injection (RCE)", cwe: "CWE-94", owasp: "A03:2021-Injection" },
-  { regex: /\b(SELECT|INSERT|UPDATE|DELETE)\b.*?\s*(WHERE|VALUES).*(?:\+|`|\$|\%s)/i, vuln: "Possível SQL Injection (Concatenação Insegura)", cwe: "CWE-89", owasp: "A03:2021-Injection" },
-  { regex: /\b(password|passwd|secret|api_?key|token|auth_?token|credentials?|auth_?credentials?)\b\s*[:=]\s*['"][^'"]{8,}['"]/i, vuln: "Credencial ou Chave Exposta (Hardcoded Secret)", cwe: "CWE-798", owasp: "A07:2021-Identification and Authentication Failures" },
-  { regex: /\b(innerHTML|outerHTML|document\.write)\s*=/i, vuln: "DOM XSS (Cross-Site Scripting)", cwe: "CWE-79", owasp: "A03:2021-Injection" },
-  { regex: /\b(md5|sha1)\s*\(/i, vuln: "Algoritmo de Criptografia Fraco/Obsoleto", cwe: "CWE-327", owasp: "A02:2021-Cryptographic Failures" },
-  { regex: /['"`]http:\/\/(?!localhost|127\.0\.0\.1)/i, vuln: "Tráfego Inseguro (Protocolo HTTP)", cwe: "CWE-319", owasp: "A02:2021-Cryptographic Failures" }
+  { regex: /\b(eval|exec|Function)\s*\(/i, vulnKey: "vuln_rce", cwe: "CWE-94", owasp: "A03:2021-Injection" },
+  { regex: /\b(SELECT|INSERT|UPDATE|DELETE)\b.*?\s*(WHERE|VALUES).*(?:\+|`|\$|\%s)/i, vulnKey: "vuln_sql", cwe: "CWE-89", owasp: "A03:2021-Injection" },
+  { regex: /\b(password|passwd|secret|api_?key|token|auth_?token|credentials?|auth_?credentials?)\b\s*[:=]\s*['"][^'"]{8,}['"]/i, vulnKey: "vuln_secret", cwe: "CWE-798", owasp: "A07:2021-Identification and Authentication Failures" },
+  { regex: /\b(innerHTML|outerHTML|document\.write)\s*=/i, vulnKey: "vuln_xss", cwe: "CWE-79", owasp: "A03:2021-Injection" },
+  { regex: /\b(md5|sha1)\s*\(/i, vulnKey: "vuln_crypto", cwe: "CWE-327", owasp: "A02:2021-Cryptographic Failures" },
+  { regex: /['"`]http:\/\/(?!localhost|127\.0\.0\.1)/i, vulnKey: "vuln_http", cwe: "CWE-319", owasp: "A02:2021-Cryptographic Failures" }
 ];
 
 function App() {
@@ -123,7 +123,7 @@ function App() {
 
       REGRAS_SAST.forEach(regra => {
         if (regra.regex.test(linhaLimpa)) {
-          achados.push({ vuln: regra.vuln, cwe: regra.cwe, owasp: regra.owasp, linha: `${identificador}:${idx + 1}` });
+          achados.push({ vulnKey: regra.vulnKey, cwe: regra.cwe, owasp: regra.owasp, identifier: identificador, line: idx + 1 });
         }
       });
     });
@@ -138,19 +138,19 @@ function App() {
       let achadosFinais = [];
 
       if (abaAtiva === 'snippet' && codigoSnippet.trim()) {
-        achadosFinais = analisarTexto(codigoSnippet, 'linha');
-        if (achadosFinais.length === 0) achadosFinais.push({ vuln: t.clean_code, cwe: "Seguro", owasp: "N/A", linha: "Geral" });
+        achadosFinais = analisarTexto(codigoSnippet, 'snippet');
+        if (achadosFinais.length === 0) achadosFinais.push({ isSafeResult: true, type: 'snippet' });
         setRelatorio({ tipo: 'snippet', achados: achadosFinais });
         setAnalisando(false);
       } 
       
       else if (abaAtiva === 'url' && urlInput.trim()) {
         const urlStr = urlInput.toLowerCase();
-        if (urlStr.startsWith("http://")) achadosFinais.push({ vuln: "Tráfego HTTP Não Criptografado", cwe: "CWE-319", owasp: "A02:2021-Cryptographic Failures", linha: "URL" });
-        if (/(\?|&)(cmd|exec)=/i.test(urlStr)) achadosFinais.push({ vuln: "Possível RCE em Parâmetro de URL", cwe: "CWE-94", owasp: "A03:2021-Injection", linha: "Query String" });
-        if (/(\?|&)(script|alert|img)=/i.test(urlStr)) achadosFinais.push({ vuln: "Parâmetro Suspeito de Reflected XSS", cwe: "CWE-79", owasp: "A03:2021-Injection", linha: "Query String" });
+        if (urlStr.startsWith("http://")) achadosFinais.push({ vulnKey: "vuln_url_http", cwe: "CWE-319", owasp: "A02:2021-Cryptographic Failures", identifier: 'url', line: "URL" });
+        if (/(\?|&)(cmd|exec)=/i.test(urlStr)) achadosFinais.push({ vulnKey: "vuln_url_rce", cwe: "CWE-94", owasp: "A03:2021-Injection", identifier: 'url', line: "Query String" });
+        if (/(\?|&)(script|alert|img)=/i.test(urlStr)) achadosFinais.push({ vulnKey: "vuln_url_xss", cwe: "CWE-79", owasp: "A03:2021-Injection", identifier: 'url', line: "Query String" });
         
-        if (achadosFinais.length === 0) achadosFinais.push({ vuln: t.url_safe, cwe: "Seguro", owasp: "N/A", linha: "Estrutura" });
+        if (achadosFinais.length === 0) achadosFinais.push({ isSafeResult: true, type: 'url' });
         setRelatorio({ tipo: 'url', achados: achadosFinais });
         setAnalisando(false);
       } 
@@ -161,12 +161,12 @@ function App() {
         reader.onload = (e) => {
           const content = e.target.result;
           achadosFinais = analisarTexto(content, file.name);
-          if (achadosFinais.length === 0) achadosFinais.push({ vuln: t.file_safe, cwe: "Seguro", owasp: "N/A", linha: file.name });
+          if (achadosFinais.length === 0) achadosFinais.push({ isSafeResult: true, type: 'file', fileName: file.name });
           setRelatorio({ tipo: 'file', achados: achadosFinais });
           setAnalisando(false);
         };
         reader.onerror = () => {
-          setRelatorio({ tipo: 'file', achados: [{ vuln: "Erro ao ler o ficheiro localmente.", cwe: "Erro", owasp: "N/A", linha: "N/A" }]});
+          setRelatorio({ tipo: 'file', achados: [{ isError: true }]});
           setAnalisando(false);
         };
         reader.readAsText(file);
@@ -183,15 +183,49 @@ function App() {
           <span className="text-xs font-bold text-blue-600 dark:text-green-400 uppercase">{relatorio.tipo} SCAN</span>
         </div>
         <div className="space-y-3">
-          {relatorio.achados.map((item, idx) => (
-            <div key={idx} className={`p-3 bg-white dark:bg-[#151e32] border-l-4 rounded shadow-sm ${item.cwe === 'Seguro' ? 'border-blue-500 dark:border-green-500' : 'border-red-500'}`}>
-              <div className="flex justify-between font-bold mb-1">
-                <span className={item.cwe === 'Seguro' ? 'text-blue-600 dark:text-green-400' : 'text-red-500'}>{item.vuln}</span>
-                <span className="text-slate-400 text-sm">{item.linha}</span>
+          {relatorio.achados.map((item, idx) => {
+            let titulo = "";
+            let linhaText = "";
+            let cweText = item.cwe;
+
+            // Define dinamicamente o texto com base no dicionário (t) da linguagem atual
+            if (item.isSafeResult) {
+                cweText = t.safe_status;
+                if (item.type === 'snippet') {
+                    titulo = t.clean_code;
+                    linhaText = t.general_line;
+                } else if (item.type === 'url') {
+                    titulo = t.url_safe;
+                    linhaText = t.structure_line;
+                } else if (item.type === 'file') {
+                    titulo = t.file_safe;
+                    linhaText = item.fileName;
+                }
+            } else if (item.isError) {
+                titulo = t.file_error;
+                cweText = "Error";
+                linhaText = "N/A";
+            } else {
+                titulo = t[item.vulnKey] || item.vulnKey;
+                if (item.identifier === 'snippet') {
+                    linhaText = `${t.line_prefix}${item.line}`;
+                } else if (item.identifier === 'url') {
+                    linhaText = item.line; // Mantém "URL" ou "Query String" universal
+                } else {
+                    linhaText = `${item.identifier}:${item.line}`;
+                }
+            }
+
+            return (
+              <div key={idx} className={`p-3 bg-white dark:bg-[#151e32] border-l-4 rounded shadow-sm ${item.isSafeResult ? 'border-blue-500 dark:border-green-500' : 'border-red-500'}`}>
+                <div className="flex justify-between font-bold mb-1">
+                  <span className={item.isSafeResult ? 'text-blue-600 dark:text-green-400' : 'text-red-500'}>{titulo}</span>
+                  <span className="text-slate-400 text-sm">{linhaText}</span>
+                </div>
+                <p className="text-xs font-mono text-slate-500 dark:text-slate-400">{item.owasp || 'N/A'} | {cweText}</p>
               </div>
-              <p className="text-xs font-mono text-slate-500 dark:text-slate-400">{item.owasp} | {item.cwe}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <div className="mt-5 p-4 bg-blue-50/50 dark:bg-green-950/20 border border-blue-200/50 dark:border-green-900/30 rounded flex items-center justify-between">
           <span className="text-sm text-slate-600 dark:text-slate-300">

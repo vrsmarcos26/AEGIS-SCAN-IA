@@ -37,6 +37,22 @@ export const traducoes = {
     drag_drop: "ou arraste e solte o ficheiro aqui",
     clean_code: "Código limpo! Nenhuma vulnerabilidade detetada no trecho fornecido.",
 
+    // Dynamic Report Elements (New)
+    safe_status: "Seguro",
+    general_line: "Geral",
+    structure_line: "Estrutura",
+    line_prefix: "linha:",
+    file_error: "Erro ao ler o ficheiro localmente.",
+    vuln_rce: "Code Injection (RCE)",
+    vuln_sql: "Possível SQL Injection (Concatenação Insegura)",
+    vuln_secret: "Credencial ou Chave Exposta (Hardcoded Secret)",
+    vuln_xss: "DOM XSS (Cross-Site Scripting)",
+    vuln_crypto: "Algoritmo de Criptografia Fraco/Obsoleto",
+    vuln_http: "Tráfego Inseguro (Protocolo HTTP)",
+    vuln_url_http: "Tráfego HTTP Não Criptografado",
+    vuln_url_rce: "Possível RCE em Parâmetro de URL",
+    vuln_url_xss: "Parâmetro Suspeito de Reflected XSS",
+
     // Pages Content (PT)
     docs_official_body: "### Introdução à Plataforma AEGIS\nO AEGIS é um motor de análise estática de segurança (SAST) projetado para integrar-se de forma fluida nos fluxos de desenvolvimento modernos. O nosso foco é fornecer identificação rápida e precisa de vulnerabilidades do Top 10 da OWASP.\n\n### Arquitetura do Sistema\nO ecossistema AEGIS divide-se em dois componentes principais:\n1. **Web Scanner (Client-Side SAST):** Uma interface construída em React/Vite para validação rápida. Diferente de plataformas tradicionais, o AEGIS processa os arquivos de código e snippets inteiramente dentro do seu navegador (Browser Engine), sem tráfego de dados para a nuvem.\n2. **AEGIS CLI (Motor Principal):** Uma ferramenta baseada em Python desenhada para ser orquestrada em pipelines CI/CD (GitHub Actions, GitLab CI). Ela realiza auditorias em profundidade utilizando heurística avançada e análise de grafos de fluxo de dados (DFG).",
     terms_body: "### 1. Aceitação de Termos e Responsabilidade\nAo utilizar o AEGIS Web Scanner ou a versão CLI, o utilizador reconhece que o software é fornecido \"no estado em que se encontra\" (As-Is). A equipa do AEGIS não assume qualquer responsabilidade por falsos positivos, falsos negativos ou interrupções de serviço.\n\n### 2. Uso Ético e Legalidade\nEsta ferramenta foi desenvolvida estritamente para propósitos de Defesa (Blue Team), AppSec e auditoria de código autorizado. A submissão de malware ativo, engenharia reversa para fins ilícitos ou o uso do motor contra alvos sem permissão explícita violam os nossos termos de serviço.\n\n### 3. Licenciamento de Código Aberto\nO projeto AEGIS é mantido sob uma licença de código aberto permissiva, promovendo o estudo acadêmico e melhorias pela comunidade de cibersegurança.",
@@ -82,6 +98,22 @@ export const traducoes = {
     url_safe: "URL structure appears secure. HTTPS traffic validated.",
     drag_drop: "or drag and drop file here",
     clean_code: "Clean code! No vulnerabilities detected in the provided snippet.",
+
+    // Dynamic Report Elements (New)
+    safe_status: "Safe",
+    general_line: "General",
+    structure_line: "Structure",
+    line_prefix: "line:",
+    file_error: "Error reading file locally.",
+    vuln_rce: "Code Injection (RCE)",
+    vuln_sql: "Possible SQL Injection (Insecure Concatenation)",
+    vuln_secret: "Exposed Credential or Key (Hardcoded Secret)",
+    vuln_xss: "DOM XSS (Cross-Site Scripting)",
+    vuln_crypto: "Weak/Deprecated Cryptographic Algorithm",
+    vuln_http: "Insecure Traffic (HTTP Protocol)",
+    vuln_url_http: "Unencrypted HTTP Traffic",
+    vuln_url_rce: "Possible RCE in URL Parameter",
+    vuln_url_xss: "Suspicious Reflected XSS Parameter",
 
     // Pages Content (EN)
     docs_official_body: "### Introduction to the AEGIS Platform\nAEGIS is a Static Application Security Testing (SAST) engine designed to integrate seamlessly into modern development workflows. Our focus is to provide fast and accurate identification of OWASP Top 10 vulnerabilities.\n\n### System Architecture\nThe AEGIS ecosystem is divided into two main components:\n1. **Web Scanner (Client-Side SAST):** A React/Vite-built interface for quick validation. Unlike traditional platforms, AEGIS processes code files and snippets entirely within your browser engine, with no data traffic to the cloud.\n2. **AEGIS CLI (Core Engine):** A Python-based tool designed to be orchestrated in CI/CD pipelines (GitHub Actions, GitLab CI). It performs in-depth audits using advanced heuristics and Data Flow Graph (DFG) analysis.",
