@@ -389,7 +389,7 @@ function App() {
                   <div className="flex-grow bg-slate-100 dark:bg-[#0b1120] border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-300 font-mono text-sm p-3 rounded flex items-center justify-center overflow-x-auto">
                     <code>git clone https://github.com/felpsbc/SecTool.git</code>
                   </div>
-                  <a href="https://github.com/CAMPUSCEUB/AEGIS" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-900 dark:bg-green-600 dark:hover:bg-green-500 text-white px-6 py-3 rounded font-bold transition-colors">
+                  <a href="https://github.com/felpsbc/SecTool" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-900 dark:bg-green-600 dark:hover:bg-green-500 text-white px-6 py-3 rounded font-bold transition-colors">
                     <DownloadIcon />
                     GitHub
                   </a>
