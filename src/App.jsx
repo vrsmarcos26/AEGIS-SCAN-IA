@@ -14,6 +14,9 @@ const TerminalIcon = () => (
 const DownloadIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
 );
+const PlayIcon = () => (
+  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+);
 const FileCheckIcon = () => (
   <svg className="w-12 h-12 text-blue-500 dark:text-green-500 mb-4" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
 );
@@ -188,7 +191,6 @@ function App() {
             let linhaText = "";
             let cweText = item.cwe;
 
-            // Define dinamicamente o texto com base no dicionário (t) da linguagem atual
             if (item.isSafeResult) {
                 cweText = t.safe_status;
                 if (item.type === 'snippet') {
@@ -210,7 +212,7 @@ function App() {
                 if (item.identifier === 'snippet') {
                     linhaText = `${t.line_prefix}${item.line}`;
                 } else if (item.identifier === 'url') {
-                    linhaText = item.line; // Mantém "URL" ou "Query String" universal
+                    linhaText = item.line; 
                 } else {
                     linhaText = `${item.identifier}:${item.line}`;
                 }
@@ -385,14 +387,21 @@ function App() {
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{t.cli_title}</h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400 mb-8 max-w-sm">{t.cli_desc}</p>
-                <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
-                  <div className="flex-grow bg-slate-100 dark:bg-[#0b1120] border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-300 font-mono text-sm p-3 rounded flex items-center justify-center overflow-x-auto">
-                    <code>git clone https://github.com/felpsbc/SecTool.git</code>
+                
+                <div className="flex flex-col gap-3 w-full max-w-md">
+                  <div className="w-full bg-slate-100 dark:bg-[#0b1120] border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-300 font-mono text-sm p-3 rounded flex items-center justify-center overflow-x-auto">
+                    <code>git clone https://github.com/CAMPUSCEUB/AEGIS.git</code>
                   </div>
-                  <a href="https://github.com/felpsbc/SecTool" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-900 dark:bg-green-600 dark:hover:bg-green-500 text-white px-6 py-3 rounded font-bold transition-colors">
-                    <DownloadIcon />
-                    GitHub
-                  </a>
+                  <div className="flex flex-col sm:flex-row gap-3 w-full">
+                    <a href="https://github.com/CAMPUSCEUB/AEGIS" target="_blank" rel="noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-900 dark:bg-green-600 dark:hover:bg-green-500 text-white px-6 py-3 rounded font-bold transition-colors">
+                      <DownloadIcon />
+                      GitHub
+                    </a>
+                    <a href="https://colab.research.google.com/github/felpsbc/SecTool/blob/main/AEGIS.ipynb" target="_blank" rel="noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded font-bold transition-colors">
+                      <PlayIcon />
+                      {t.btn_colab}
+                    </a>
+                  </div>
                 </div>
               </div>
             )}
